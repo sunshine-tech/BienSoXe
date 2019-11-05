@@ -40,7 +40,7 @@ class NonBusinessSpecialSeries(enum.Enum):
     R = 'R'   # 51R-14139
 
 
-    # This plate has yellow background
+# This plate has yellow background
 class SpecialEconomicZoneSeries(enum.Enum):
     LB = 'LB'  # Lao Bảo
     CT = 'CT'  # Cầu Treo

@@ -39,6 +39,10 @@ electrical_motorcycle_data = (
     ('29MĐ1 94190', '29', 'MĐ1'),
 )
 
+diplomatic_data = (
+    ('80-011-NG-01', '80', 'NG', '011'),
+)
+
 
 @pytest.mark.parametrize("original_string, locality, series", automobile_data)
 def test_automobile(original_string, locality, series):
@@ -71,6 +75,12 @@ def test_high_capacity_motorcycle(original_string, locality, series):
     assert plate.vehicle_type == VehicleType.DOMESTIC_MOTORCYCLE_OVER_175CC
     assert plate.locality == locality
     assert plate.series == series
+
+
+@pytest.mark.parametrize("original_string, locality, series, dip_country", diplomatic_data)
+def test_diplomatic_vehicle(original_string, locality, series, dip_country):
+    plate = VietnamVehiclePlate.from_string(original_string)
+    assert plate.dip_country == dip_country
 
 
 def test_invalid_plate_number():

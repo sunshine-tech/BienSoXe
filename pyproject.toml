@@ -1,12 +1,31 @@
 [tool.poetry]
 name = "biensoxe"
-version = "0.1.0"
+version = "0.8.0"
 description = "Library to parse and validate Vietnamese vehicle plate"
 authors = ["Nguyễn Hồng Quân <ng.hong.quan@gmail.com>"]
+license = "MIT"
+homepage = "https://github.com/sunshine-tech/BienSoXe"
+repository = "https://github.com/sunshine-tech/BienSoXe.git"
+readme = "README.rst"
+classifiers = [
+    'Natural Language :: Vietnamese',
+    'Intended Audience :: Manufacturing',
+    'Operating System :: OS Independent',
+    'Topic :: Home Automation',
+    'Topic :: Software Development :: Embedded Systems',
+    'Topic :: Software Development :: Internationalization',
+    'Topic :: Software Development :: Localization',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
 pydantic = "^1.0"
+dedict = "^1.0.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

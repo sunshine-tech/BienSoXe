@@ -14,6 +14,8 @@ from typing import Optional
 from pydantic import constr
 from pydantic.dataclasses import dataclass
 
+from .utils import split_to_triples
+
 
 # Use this regex to strip out all illegal characters
 REGEX_CLEAN_PLATE_NUMBER = re.compile(r'[^a-zđA-ZĐ0-9]')
@@ -38,8 +40,8 @@ class NonBusinessSpecialSeries(enum.Enum):
     R = 'R'   # 51R-14139
 
 
+    # This plate has yellow background
 class SpecialEconomicZoneSeries(enum.Enum):
-    ''' This plate has yellow background '''
     LB = 'LB'  # Lao Bảo
     CT = 'CT'  # Cầu Treo
     LA = 'LA'  # Don't know where it is
@@ -130,10 +132,10 @@ REGEXES = {
 
 @dataclass
 class VietnamVehiclePlate:
-    '''Class to represent a Vietnamese vehicle number plate.
+    """Class to represent a Vietnamese vehicle number plate.
 
     Library user must not create instance directly from this class constructer.
-    Please call :function:`VietnamVehiclePlate.from_string` instead.
+    Please call :meth:`VietnamVehiclePlate.from_string` instead.
 
     :param compact: Compact string of plate number, where all characters other than letters and numbers are stripped.
     :param vehicle_type: Type of vehicle (of :class:`VehicleType` type), deduced from the plate number.
@@ -141,7 +143,8 @@ class VietnamVehiclePlate:
     :param order: Registration order number.
     :param locality: Locality where this vehicle was registered.
     :param dip_country: Foreign country where the vehicle owner came from (in case of diplomat, foreigner use).
-    '''
+    """
+
     compact: constr(regex=f'[a-zA-Z0-9]+')
     vehicle_type: VehicleType
     series: str
@@ -149,13 +152,29 @@ class VietnamVehiclePlate:
     locality: Optional[str] = None
     dip_country: Optional[str] = None
 
+    def __str__(self):
+        """Return string representation of this object."""
+        vehicle_type = self.vehicle_type
+        mototcycle_types = (VehicleType.DOMESTIC_MOTORCYCLE_UNDER_50CC, VehicleType.DOMESTIC_MOTORCYCLE_OVER_175CC,
+                            VehicleType.DOMESTIC_MOTORCYCLE_50_TO_175CC)
+        if len(self.order) <= 4:
+            order = self.order
+        else:
+            # For number plate since 2010, the order will be separated with dot,
+            # to be easier to read.
+            order = '.'.join(split_to_triples(self.order))
+        if vehicle_type in mototcycle_types:
+            return f'{self.locality}-{self.series} {order}'
+        return f'{self.locality}{self.series}-{order}'
+
     @classmethod
     def from_string(cls, number_sequence: str):
-        '''Parse the number string of Vietnamese vehicle registration plate.
+        """Parse the number string of Vietnamese vehicle registration plate.
+
         :param number_sequence: Number string as printed on the plate.
         :return: :class:`VietnamVehiclePlate` object.
         :raises ValueError: If the number string could not be parsed.
-        '''
+        """
         compact = REGEX_CLEAN_PLATE_NUMBER.sub('', number_sequence.upper())
         if not compact:
             raise ValueError('Empty string')

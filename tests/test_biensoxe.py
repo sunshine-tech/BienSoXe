@@ -71,3 +71,8 @@ def test_high_capacity_motorcycle(original_string, locality, series):
     assert plate.vehicle_type == VehicleType.DOMESTIC_MOTORCYCLE_OVER_175CC
     assert plate.locality == locality
     assert plate.series == series
+
+
+def test_invalid_plate_number():
+    with pytest.raises(ValueError):
+        VietnamVehiclePlate.from_string('XXYYZZ11')

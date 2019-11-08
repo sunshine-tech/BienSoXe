@@ -86,3 +86,13 @@ def test_diplomatic_vehicle(original_string, locality, series, dip_country):
 def test_invalid_plate_number():
     with pytest.raises(ValueError):
         VietnamVehiclePlate.from_string('XXYYZZ11')
+
+
+def test_invalid_type():
+    with pytest.raises(TypeError):
+        VietnamVehiclePlate.from_string(123)
+
+
+def test_not_accept_none():
+    with pytest.raises(TypeError):
+        VietnamVehiclePlate.from_string(None)

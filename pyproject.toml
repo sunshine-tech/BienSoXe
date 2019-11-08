@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "biensoxe"
-version = "0.8.1"
+version = "0.8.2"
 description = "Library to parse and validate Vietnamese vehicle plate"
 authors = ["Nguyễn Hồng Quân <ng.hong.quan@gmail.com>"]
 license = "MIT"

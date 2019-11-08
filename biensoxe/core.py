@@ -168,16 +168,19 @@ class VietnamVehiclePlate:
         return f'{self.locality}{self.series}-{order}'
 
     @classmethod
-    def from_string(cls, number_sequence: str):
+    def from_string(cls, number_sequence: str) -> 'VietnamVehiclePlate':
         """Parse the number string of Vietnamese vehicle registration plate.
 
         :param number_sequence: Number string as printed on the plate.
         :return: :class:`VietnamVehiclePlate` object.
         :raises ValueError: If the number string could not be parsed.
+        :raises TypeError: If the passed value is not a string.
         """
+        if not isinstance(number_sequence, str):
+            raise TypeError(f'Need a string, not {type(number_sequence)} type!')
         compact = REGEX_CLEAN_PLATE_NUMBER.sub('', number_sequence.upper())
         if not compact:
-            raise ValueError('Empty string')
+            raise ValueError('Empty string!')
         for vtype, regex in REGEXES.items():
             m = regex.fullmatch(compact)
             if m:

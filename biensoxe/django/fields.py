@@ -7,7 +7,8 @@ from django.db.backends.postgresql.base import DatabaseWrapper
 from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import CICharField
 from django.utils.translation import gettext_lazy as _
-from biensoxe import VietnamVehiclePlate
+
+from ..core import VietnamVehiclePlate
 
 
 def parse_vehicleplate(number_string: str) -> VietnamVehiclePlate:
@@ -25,6 +26,10 @@ class VietnamVehiclePlateField(CICharField):
     """
 
     description = _('Field to store Vietnamese vehicle plate')
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('max_length', 20)
+        super().__init__(*args, **kwargs)
 
     def from_db_value(self, value: Optional[str],
                       expression: Expression, connection: DatabaseWrapper):

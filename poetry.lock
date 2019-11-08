@@ -46,6 +46,19 @@ docs = ["sphinx", "rst.linker"]
 testing = ["packaging", "importlib-resources"]
 
 [[package]]
+category = "main"
+description = "Basic memoized properties for Python."
+name = "memoprop"
+optional = false
+python-versions = "*"
+version = "0.2.0"
+
+[package.extras]
+dev = ["ipython", "black", "rope", "pre-commit", "flake8", "flake8-black", "flake8-bandit", "flake8-bugbear", "flake8-builtins", "flake8-mutable", "flake8-print", "pep8-naming", "pytest", "pytest-mock", "pytest-cov"]
+lint = ["flake8", "flake8-black", "flake8-bandit", "flake8-bugbear", "flake8-builtins", "flake8-mutable", "flake8-print", "pep8-naming"]
+test = ["pytest", "pytest-mock", "pytest-cov"]
+
+[[package]]
 category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
@@ -132,7 +145,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "a30b69b19089cfa5f9c70dc8e206d8669be8f6e9e6d9ebfc179269052b61130a"
+content-hash = "747d596b6fdc00862d9e6726c859f51ec2cb9f23e12e9a7715dbde2aa76e0634"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -151,6 +164,10 @@ colorama = [
 importlib-metadata = [
     {file = "importlib_metadata-0.23-py2.py3-none-any.whl", hash = "sha256:d5f18a79777f3aa179c145737780282e27b508fc8fd688cb17c7a813e8bd39af"},
     {file = "importlib_metadata-0.23.tar.gz", hash = "sha256:aa18d7378b00b40847790e7c27e11673d7fed219354109d0e7b9e5b25dc3ad26"},
+]
+memoprop = [
+    {file = "memoprop-0.2.0-py3-none-any.whl", hash = "sha256:2ceee0375cf8682d6ce9cbcf0e83f5f442a8f5387fad0fb9a1d46c35d7a5f9dd"},
+    {file = "memoprop-0.2.0.tar.gz", hash = "sha256:ccd7177228a887bcdd63150f41a92d66b7ffa58eb30996c46b0ca8ff9237a4fc"},
 ]
 more-itertools = [
     {file = "more-itertools-7.2.0.tar.gz", hash = "sha256:409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832"},

@@ -50,8 +50,11 @@ This library provides a field type, ``VietnamVehiclePlateField``, for Django mod
 
     from biensoxe.django import VietnamVehiclePlateField
 
+    def default_plate_number():
+        return VietnamVehiclePlate.from_string('10A 00001')
+
     class Vehicle(models.Model):
-        plate_number = VietnamVehiclePlateField(max_length=20, default='10A 00001', unique=True)
+        plate_number = VietnamVehiclePlateField(max_length=20, default=default_plate_number, unique=True)
 
     def __str__(self):
         return str(self.plate_number) or self.pk

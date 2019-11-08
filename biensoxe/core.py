@@ -1,6 +1,9 @@
-# Legal documents: Circular 36/2010/TT-BCA, Circular 15/2014/TT-BCA
 
-# Ref:
+# Author: Nguyễn Hồng Quân <ng.hong.quan@gmail.com>
+#
+# References:
+# Legal documents: Circular 36/2010/TT-BCA, Circular 15/2014/TT-BCA
+# Internet:
 # https://thuvienphapluat.vn/van-ban/Giao-thong-Van-tai/Thong-tu-15-2014-TT-BCA-quy-dinh-ve-dang-ky-xe-Bo-truong-Bo-Cong-an-229224.aspx
 # https://danluat.thuvienphapluat.vn/ban-da-biet-gi-ve-bien-so-xe-132978.aspx
 # https://tuoitre.vn/2800-xe-bon-banh-khong-biet-xep-vao-loai-xe-gi-1078666.htm
@@ -11,7 +14,7 @@ import re
 import enum
 from typing import Optional
 
-from pydantic import constr
+from memoprop import memoized_property
 from pydantic.dataclasses import dataclass
 
 from .utils import split_to_triples
@@ -137,7 +140,6 @@ class VietnamVehiclePlate:
     Library user must not create instance directly from this class constructer.
     Please call :meth:`VietnamVehiclePlate.from_string` instead.
 
-    :param compact: Compact string of plate number, where all characters other than letters and numbers are stripped.
     :param vehicle_type: Type of vehicle (of :class:`VehicleType` type), deduced from the plate number.
     :param series: Series string of the plate number.
     :param order: Registration order number.
@@ -145,12 +147,26 @@ class VietnamVehiclePlate:
     :param dip_country: Foreign country where the vehicle owner came from (in case of diplomat, foreigner use).
     """
 
-    compact: constr(regex=f'[a-zA-Z0-9]+')
     vehicle_type: VehicleType
     series: str
     order: str
     locality: Optional[str] = None
     dip_country: Optional[str] = None
+
+    @memoized_property
+    def compact(self):
+        """
+        Compact string of plate number, where all characters other than letters and numbers are stripped.
+
+        If we are about to serialize and save this object, the compact form should be used.
+        """
+        locality = self.locality or ''
+        dip_country = self.dip_country or ''
+        return f'{locality}{dip_country}{self.series}{self.order}'
+
+    def __len__(self):
+        """Return the length of this object, if it is about to be saved some where as string."""
+        return len(self.compact)
 
     def __str__(self):
         """Return string representation of this object."""
@@ -183,25 +199,25 @@ class VietnamVehiclePlate:
             raise ValueError('Empty string!')
         for vtype, regex in REGEXES.items():
             m = regex.fullmatch(compact)
-            if m:
-                data = {
-                    'compact': compact,
-                    'vehicle_type': vtype,
-                    'order': m.group('order')
-                }
-                try:
-                    data['locality'] = m.group('locality')
-                except IndexError:
-                    pass
-                try:
-                    data['series'] = m.group('series')
-                except IndexError:
-                    pass
-                try:
-                    data['dip_country'] = m.group('country')
-                except IndexError:
-                    pass
-                return VietnamVehiclePlate(**data)
+            if not m:
+                continue
+            data = {
+                'vehicle_type': vtype,
+                'order': m.group('order')
+            }
+            try:
+                data['locality'] = m.group('locality')
+            except IndexError:
+                pass
+            try:
+                data['series'] = m.group('series')
+            except IndexError:
+                pass
+            try:
+                data['dip_country'] = m.group('country')
+            except IndexError:
+                pass
+            return VietnamVehiclePlate(**data)
         else:
             # Not found match
             raise ValueError('Unrecognized plate number')

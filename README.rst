@@ -2,7 +2,9 @@
 BienSoXe
 ========
 
-Library to parse and validate Vietnamese vehicle plate
+Library to validate and parse Vietnamese vehicle plate.
+
+This library is not a computer-vision-based license plate recognition software. It instead is used for validating output of such computer vision software. Imagine that you use camera to track all cars coming in and out of your parking lot, but you don't want to save false data generated from recognition process (due to wrong angle of canera, for example).
 
 Install
 -------
@@ -38,3 +40,24 @@ To format the plate number as in daily life, pass ``VietnamVehiclePlate`` to ``s
 
     >>> str(plate)
     '72-E1 011.30'
+
+Django
+~~~~~~
+
+This library provides a field type, ``VietnamVehiclePlateField``, for Django model. The field will return value as ``VietnamVehiclePlate`` object. Here is example:
+
+.. code-block:: python
+
+    from biensoxe.django import VietnamVehiclePlateField
+
+    class Vehicle(models.Model):
+        plate_number = VietnamVehiclePlateField(max_length=20, default='10A 00001', unique=True)
+
+    def __str__(self):
+        return str(self.plate_number) or self.pk
+
+Note that this field stores value internally as PostgeSQL ``CIText`` data type, so you can only use this field with PostgreSQL.
+You also need to activate CITextExtension_ your self.
+
+
+.. _CITextExtension: https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/operations/#citextextension

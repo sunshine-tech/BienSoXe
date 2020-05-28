@@ -1,4 +1,7 @@
-def split_to_triples(string: str):
+from typing import Tuple
+
+
+def split_to_triples(string: str) -> Tuple[str, ...]:
     """Split a string to many substrings of 3-character.
 
     For example, split "abcdef" to "abc", "def".

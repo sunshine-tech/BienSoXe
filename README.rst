@@ -2,9 +2,12 @@
 BienSoXe
 ========
 
+.. image:: https://badgen.net/pypi/v/biensoxe
+   :target: https://pypi.org/project/biensoxe
+
 Library to validate and parse Vietnamese vehicle plate.
 
-This library is not a computer-vision-based license plate recognition software. It instead is used for validating output of such computer vision software. Imagine that you use camera to track all cars coming in and out of your parking lot, but you don't want to save false data generated from recognition process (due to wrong angle of canera, for example).
+This library is not a computer-vision-based license plate recognition software. It instead is used for validating output of such computer vision software. Imagine that you use camera to track all cars coming in and out off your parking lot, but you don't want to save false result (due to wrong angle of camera, for example), you can use this library to check and remove them.
 
 Install
 -------
@@ -26,6 +29,10 @@ Call ``VietnamVehiclePlate.from_string``, passing the number string, to create `
     >>> VietnamVehiclePlate.from_string('44A-112.23')
     VietnamVehiclePlate(compact='44A11223', vehicle_type=<VehicleType.DOMESTIC_AUTOMOBILE: 1>,
     series='A', order='11223', locality='44', dip_country=None)
+
+    >>> VietnamVehiclePlate.from_string('41-291-NG-01')
+    VietnamVehiclePlate(vehicle_type=<VehicleType.DIPLOMATIC: 9>, series='NG', order='01', locality='41', dip_country='291')
+
 
 The method raises ``ValueError`` if the string could not be parsed.
 
@@ -60,7 +67,14 @@ This library provides a field type, ``VietnamVehiclePlateField``, for Django mod
         return str(self.plate_number) or self.pk
 
 Note that this field stores value internally as PostgeSQL ``CIText`` data type, so you can only use this field with PostgreSQL.
-You also need to activate CITextExtension_ your self.
+You also need to activate CITextExtension_ yourself.
+
+
+Credit
+------
+
+Brought to you by `Nguyễn Hồng Quân <author_>`_.
 
 
 .. _CITextExtension: https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/operations/#citextextension
+.. _author: https://quan.hoabinh.vn

@@ -41,6 +41,11 @@ electrical_motorcycle_data = (
 
 diplomatic_data = (
     ('80-011-NG-01', '80', 'NG', '011'),
+    ('41-291-NG-01', '41', 'NG', '291'),
+)
+
+display_data = (
+    ('41-291.NG -01', '41-291-NG-01'),
 )
 
 
@@ -96,3 +101,9 @@ def test_invalid_type():
 def test_not_accept_none():
     with pytest.raises(TypeError):
         VietnamVehiclePlate.from_string(None)
+
+
+@pytest.mark.parametrize("original_string, canonical", display_data)
+def test_daily_life_display(original_string, canonical):
+    plate = VietnamVehiclePlate.from_string(original_string)
+    assert str(plate) == canonical

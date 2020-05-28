@@ -181,6 +181,8 @@ class VietnamVehiclePlate:
             order = '.'.join(split_to_triples(self.order))
         if vehicle_type in mototcycle_types:
             return f'{self.locality}-{self.series} {order}'
+        if self.dip_country:
+            return f'{self.locality}-{self.dip_country}-{self.series}-{order}'
         return f'{self.locality}{self.series}-{order}'
 
     @classmethod
